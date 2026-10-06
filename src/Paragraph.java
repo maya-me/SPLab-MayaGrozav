@@ -1,13 +1,26 @@
 public class Paragraph extends Element {
     private String text;
+    private AlignStrategy textAlignment;
 
     public Paragraph(String text) {
         this.text = text;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setAlignStrategy(AlignStrategy alignStrategy) {
+        this.textAlignment = alignStrategy;
+    }
+
     @Override
     public void print() {
-        System.out.println("Paragraph: " + text);
+        if (textAlignment != null) {
+            textAlignment.render(this, new Context());
+        } else {
+            System.out.println("Paragraph: " + text);
+        }
     }
 
     @Override
