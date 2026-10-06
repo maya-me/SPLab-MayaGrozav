@@ -1,25 +1,21 @@
-import java.util.concurrent.TimeUnit;
-
-public class Image extends Element {
+public class ImageProxy extends Element {
     private String url;
-    private ImageContent content;
+    private Image realImg;
 
-    public Image(String url) {
+    public ImageProxy(String url) {
         this.url = url;
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public ImageContent content() {
-        return content;
+    private Image loadImage() {
+        if (realImg == null) {
+            realImg = new Image(url);
+        }
+        return realImg;
     }
 
     @Override
     public void print() {
-        System.out.println("Image with name:" + url);
+        loadImage().print();
     }
 
     @Override
