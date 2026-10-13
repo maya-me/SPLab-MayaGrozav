@@ -24,6 +24,11 @@ public class Paragraph extends Element {
     }
 
     @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    @Override
     public void add(Element element) {
         throw new UnsupportedOperationException();
     }

@@ -18,6 +18,13 @@ public class Book {
         elements.add(element);
     }
 
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+        for (Element element : elements) {
+            element.accept(visitor);
+        }
+    }
+
     public void print() {
         System.out.println("Book: " + title);
         System.out.println("Authors:");
