@@ -11,6 +11,6 @@ public class GetBookByIdCommand implements Command<Book> {
 
     @Override
     public Book execute(CommandContext context) {
-        return context.getBooksService().findById(id);
+        return context.getBooksRepository().findById(id).orElse(null);
     }
 }

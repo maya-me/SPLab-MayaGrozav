@@ -1,8 +1,16 @@
 package ro.uvt.info.splabmayagrozav.models;
 
-public class ImageProxy extends Element {
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
+
+@Entity
+public class ImageProxy extends BaseElement {
     private String url;
+    @Transient
     private Image realImg;
+
+    public ImageProxy() {
+    }
 
     public ImageProxy(String url) {
         this.url = url;

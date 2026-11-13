@@ -1,7 +1,14 @@
 package ro.uvt.info.splabmayagrozav.models;
 
-public class Table extends Element {
+import jakarta.persistence.Entity;
+
+@Entity
+@jakarta.persistence.Table(name = "TableElement")
+public class Table extends BaseElement {
     private String title;
+
+    public Table() {
+    }
 
     public Table(String title) {
         this.title = title;
