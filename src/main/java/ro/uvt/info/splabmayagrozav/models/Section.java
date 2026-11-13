@@ -1,11 +1,20 @@
 package ro.uvt.info.splabmayagrozav.models;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Section extends Element {
+@Entity
+public class Section extends BaseElement {
     private String title;
+    @OneToMany(targetEntity = BaseElement.class, cascade = CascadeType.ALL)
     private List<Element> children = new ArrayList<>();
+
+    public Section() {
+    }
 
     public Section(String title) {
         this.title = title;

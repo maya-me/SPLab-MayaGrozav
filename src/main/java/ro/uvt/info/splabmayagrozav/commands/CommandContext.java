@@ -1,15 +1,16 @@
 package ro.uvt.info.splabmayagrozav.commands;
 
-import ro.uvt.info.splabmayagrozav.services.BooksService;
+import ro.uvt.info.splabmayagrozav.models.Book;
+import ro.uvt.info.splabmayagrozav.persistence.CrudRepository;
 
 public class CommandContext {
-    private final BooksService booksService;
+    private final CrudRepository<Book, Integer> booksRepository;
 
-    public CommandContext(BooksService booksService) {
-        this.booksService = booksService;
+    public CommandContext(CrudRepository<Book, Integer> booksRepository) {
+        this.booksRepository = booksRepository;
     }
 
-    public BooksService getBooksService() {
-        return booksService;
+    public CrudRepository<Book, Integer> getBooksRepository() {
+        return booksRepository;
     }
 }

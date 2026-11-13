@@ -21,9 +21,9 @@ import ro.uvt.info.splabmayagrozav.executors.AsyncRequestTracker;
 import ro.uvt.info.splabmayagrozav.executors.CommandExecutor;
 import ro.uvt.info.splabmayagrozav.executors.RequestStatus;
 import ro.uvt.info.splabmayagrozav.models.Book;
-import ro.uvt.info.splabmayagrozav.services.BooksService;
+import ro.uvt.info.splabmayagrozav.persistence.CrudRepository;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
@@ -34,18 +34,18 @@ public class BooksController {
     private final CommandExecutor asyncExecutor;
     private final AsyncRequestTracker tracker;
 
-    public BooksController(BooksService booksService,
+    public BooksController(CrudRepository<Book, Integer> booksRepository,
                            @Qualifier("syncCommandExecutor") CommandExecutor syncExecutor,
                            @Qualifier("asyncCommandExecutor") CommandExecutor asyncExecutor,
                            AsyncRequestTracker tracker) {
-        this.context = new CommandContext(booksService);
+        this.context = new CommandContext(booksRepository);
         this.syncExecutor = syncExecutor;
         this.asyncExecutor = asyncExecutor;
         this.tracker = tracker;
     }
 
     @GetMapping
-    public Map<Integer, Book> getAll() {
+    public List<Book> getAll() {
         return syncExecutor.execute(new GetAllBooksCommand(), context).join();
     }
 
@@ -56,7 +56,7 @@ public class BooksController {
 
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Book book) {
-        CompletableFuture<Integer> future = asyncExecutor.execute(new CreateBookCommand(book), context);
+        CompletableFuture<Book> future = asyncExecutor.execute(new CreateBookCommand(book), context);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(tracker.track(future));
     }
 

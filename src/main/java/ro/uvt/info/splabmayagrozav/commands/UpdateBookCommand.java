@@ -13,6 +13,11 @@ public class UpdateBookCommand implements Command<Boolean> {
 
     @Override
     public Boolean execute(CommandContext context) {
-        return context.getBooksService().update(id, book);
+        if (!context.getBooksRepository().existsById(id)) {
+            return false;
+        }
+        book.setId(id);
+        context.getBooksRepository().save(book);
+        return true;
     }
 }

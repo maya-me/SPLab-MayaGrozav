@@ -2,11 +2,11 @@ package ro.uvt.info.splabmayagrozav.commands;
 
 import ro.uvt.info.splabmayagrozav.models.Book;
 
-import java.util.Map;
+import java.util.List;
 
-public class GetAllBooksCommand implements Command<Map<Integer, Book>> {
+public class GetAllBooksCommand implements Command<List<Book>> {
     @Override
-    public Map<Integer, Book> execute(CommandContext context) {
-        return context.getBooksService().findAll();
+    public List<Book> execute(CommandContext context) {
+        return context.getBooksRepository().findAll();
     }
 }
