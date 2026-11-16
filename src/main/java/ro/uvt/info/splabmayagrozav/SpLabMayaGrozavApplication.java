@@ -3,6 +3,9 @@ package ro.uvt.info.splabmayagrozav;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import ro.uvt.info.splabmayagrozav.difexamples.ClientComponent;
 import ro.uvt.info.splabmayagrozav.difexamples.SingletonComponent;
 import ro.uvt.info.splabmayagrozav.difexamples.TransientComponent;
@@ -53,5 +56,15 @@ public class SpLabMayaGrozavApplication {
         // One can also request an instance from DI context by name
         c = (ClientComponent)context.getBean("clientComponent");
         c.operation();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
     }
 }

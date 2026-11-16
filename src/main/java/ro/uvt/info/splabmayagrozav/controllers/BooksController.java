@@ -21,6 +21,7 @@ import ro.uvt.info.splabmayagrozav.executors.AsyncRequestTracker;
 import ro.uvt.info.splabmayagrozav.executors.CommandExecutor;
 import ro.uvt.info.splabmayagrozav.executors.RequestStatus;
 import ro.uvt.info.splabmayagrozav.models.Book;
+import ro.uvt.info.splabmayagrozav.observer.AllBooksSubject;
 import ro.uvt.info.splabmayagrozav.persistence.CrudRepository;
 
 import java.util.List;
@@ -33,15 +34,18 @@ public class BooksController {
     private final CommandExecutor syncExecutor;
     private final CommandExecutor asyncExecutor;
     private final AsyncRequestTracker tracker;
+    private final AllBooksSubject allBooksSubject;
 
     public BooksController(CrudRepository<Book, Integer> booksRepository,
                            @Qualifier("syncCommandExecutor") CommandExecutor syncExecutor,
                            @Qualifier("asyncCommandExecutor") CommandExecutor asyncExecutor,
-                           AsyncRequestTracker tracker) {
+                           AsyncRequestTracker tracker,
+                           AllBooksSubject allBooksSubject) {
         this.context = new CommandContext(booksRepository);
         this.syncExecutor = syncExecutor;
         this.asyncExecutor = asyncExecutor;
         this.tracker = tracker;
+        this.allBooksSubject = allBooksSubject;
     }
 
     @GetMapping
@@ -57,6 +61,7 @@ public class BooksController {
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Book book) {
         CompletableFuture<Book> future = asyncExecutor.execute(new CreateBookCommand(book), context);
+        future.thenAccept(allBooksSubject::add);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(tracker.track(future));
     }
 
